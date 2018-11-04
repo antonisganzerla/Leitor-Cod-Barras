@@ -20,6 +20,7 @@ public class SimpleScannerActivity extends AppCompatActivity implements ZXingSca
         setContentView(R.layout.activity_simple_scanner);
 
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
+        mScannerView.setAutoFocus(true);
         setContentView(mScannerView);
     }
 
