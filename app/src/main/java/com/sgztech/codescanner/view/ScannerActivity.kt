@@ -1,4 +1,4 @@
-package com.sgztech.codescanner
+package com.sgztech.codescanner.view
 
 import android.app.Activity
 import android.content.Intent
@@ -7,8 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
-import com.sgztech.codescanner.MainActivity.Companion.SCANNED_DATA
-import com.sgztech.codescanner.MainActivity.Companion.SCANNED_ERROR
+import com.sgztech.codescanner.R
+import com.sgztech.codescanner.view.MainActivity.Companion.SCANNED_DATA
+import com.sgztech.codescanner.view.MainActivity.Companion.SCANNED_ERROR
 import kotlinx.android.synthetic.main.activity_scanner.*
 
 class ScannerActivity : AppCompatActivity() {

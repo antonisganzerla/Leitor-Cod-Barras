@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Scanner App</string>
+
+    <!-- PermissionUtil -->
+    <string name="msg_permissions_not_checked">permissions not checked</string>
+    <string name="msg_permission_not_granted">Permission NOT granted!</string>
+    <string name="msg_permission_not_granted_list">Permission NOT granted : %1$s!</string>
+    <string name="msg_permission_granted">Permission granted: %1$s !</string>
+    <string name="msg_unnecessary_check_permission">unnecessary check permission</string>
+    <string name="btn_scan">Escanear</string>
+    <string name="et_return">Retorno do escaneamento</string>
+    <string name="btn_copy">Copiar</string>
+    <string name="msg_copied">Copiado para Área de Transferência</string>
+    <string name="msg_dont_data_for_copy">Não há dados a serem copiados</string>
+    <string name="msg_without_access_to_camera">Sem acesso a câmera não é possível realizar escaneamentos</string>
 </resources>
