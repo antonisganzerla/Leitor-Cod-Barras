@@ -33,4 +33,5 @@ dependencies {
 
     implementation 'com.budiyev.android:code-scanner:2.1.0'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.gms:play-services-ads:18.2.0'
 }

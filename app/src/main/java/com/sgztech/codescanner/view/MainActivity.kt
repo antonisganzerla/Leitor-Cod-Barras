@@ -6,7 +6,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import com.sgztech.codescanner.R
 import com.sgztech.codescanner.util.PermissionUtil.checkResultPermission
 import com.sgztech.codescanner.util.PermissionUtil.havePermissions
@@ -16,12 +21,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var mInterstitialAd: InterstitialAd
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setupBtnScan()
         setupBtnCopy()
+        setupAds()
     }
 
     private fun setupBtnCopy() {
@@ -48,6 +56,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupAds() {
+        MobileAds.initialize(this)
+        setupBannerAd()
+        setupInterstitialAd()
+    }
+
+    private fun setupBannerAd() {
+        adView.loadAd(AdRequest.Builder().addTestDevice(getString(R.string.device_test_id)).build())
+    }
+
+    private fun setupInterstitialAd() {
+        mInterstitialAd = InterstitialAd(this)
+        mInterstitialAd.adUnitId = "ca-app-pub-9764822217711668/6092884455"
+        loadInterstitialAd()
+        mInterstitialAd.adListener = object : AdListener() {
+            override fun onAdClosed() {
+                Log.d("Ads", "loaded new ads")
+                loadInterstitialAd()
+            }
+        }
+    }
+
+    private fun loadInterstitialAd() {
+        mInterstitialAd.loadAd(AdRequest.Builder().addTestDevice(getString(R.string.device_test_id)).build())
+    }
+
     private fun openScannerActivity() {
         val intent = Intent(this, ScannerActivity::class.java)
         startActivityForResult(
@@ -59,8 +93,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        showInterstitialAd()
         data?.let {
             if (requestCode == RESULT_CODE) {
+
                 if (resultCode == Activity.RESULT_OK) {
                     val scannedData = it.getStringExtra(SCANNED_DATA)
                     etResult.text = scannedData
@@ -72,6 +108,14 @@ class MainActivity : AppCompatActivity() {
                     etResult.text = ""
                 }
             }
+        }
+    }
+
+    private fun showInterstitialAd() {
+        if (mInterstitialAd.isLoaded) {
+            mInterstitialAd.show()
+        } else {
+            Log.d("Ads", "The interstitial wasn't loaded yet.")
         }
     }
 
