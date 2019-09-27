@@ -8,30 +8,72 @@
     tools:context=".view.MainActivity">
 
 
-    <Button
-        android:id="@+id/btnScan"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
+    <LinearLayout
+        android:id="@+id/panel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="@string/btn_scan"
+        android:background="@color/colorWhite"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.3">
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_scanner_cam" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <RadioButton
+                android:id="@+id/rb_cam_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rb_cam_back" />
+
+            <RadioButton
+                android:id="@+id/rb_cam_front"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rb_cam_front" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_barcode_scan_black_48dp"
+
+        style="?attr/borderlessButtonStyle"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toTopOf="@+id/panelResult"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/panel" />
 
     <LinearLayout
         android:id="@+id/panelResult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
         android:layout_margin="20dp"
+        android:background="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnScan"
-        app:layout_constraintVertical_bias="0.120000005">
+        app:layout_constraintTop_toBottomOf="@+id/panel"
+        app:layout_constraintVertical_bias="0.3">
 
         <TextView
             android:id="@+id/etResult"
@@ -46,12 +88,14 @@
 
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/btnCopy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
-        android:text="@string/btn_copy"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_content_copy_black_48dp"
+        style="?attr/borderlessButtonStyle"
+        android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.489"

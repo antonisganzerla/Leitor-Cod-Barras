@@ -16,6 +16,7 @@ import com.sgztech.codescanner.R
 import com.sgztech.codescanner.util.PermissionUtil.checkResultPermission
 import com.sgztech.codescanner.util.PermissionUtil.havePermissions
 import com.sgztech.codescanner.util.SnackBarUtil.show
+import com.sgztech.codescanner.view.ScannerActivity.Companion.setupIntent
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -27,9 +28,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupDefaultRbCam()
         setupBtnScan()
         setupBtnCopy()
         setupAds()
+    }
+
+    private fun setupDefaultRbCam() {
+        rb_cam_back.isChecked = true
     }
 
     private fun setupBtnCopy() {
@@ -63,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBannerAd() {
-        adView.loadAd(AdRequest.Builder().addTestDevice(getString(R.string.device_test_id)).build())
+        adView.loadAd(AdRequest.Builder().build())
     }
 
     private fun setupInterstitialAd() {
@@ -79,13 +85,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadInterstitialAd() {
-        mInterstitialAd.loadAd(AdRequest.Builder().addTestDevice(getString(R.string.device_test_id)).build())
+        mInterstitialAd.loadAd(AdRequest.Builder().build())
     }
 
     private fun openScannerActivity() {
-        val intent = Intent(this, ScannerActivity::class.java)
         startActivityForResult(
-            intent,
+            setupIntent(applicationContext, selectedCam()),
             RESULT_CODE
         )
         etResult.text = ""
@@ -136,10 +141,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun selectedCam(): Int{
+        if(rb_cam_back.isChecked){
+            return CAMERA_BACK
+        }
+        return CAMERA_FRONT
+    }
+
 
     companion object {
         const val RESULT_CODE = 20
         const val REQUEST_CODE_PERMISSION = 10
+        const val CAMERA_FRONT = 1
+        const val CAMERA_BACK = 2
+        const val SELECTED_CAM = "SELECTED_CAM"
         const val SCANNED_DATA = "SCANNED_DATA"
         const val SCANNED_ERROR = "SCANNED_ERROR"
     }

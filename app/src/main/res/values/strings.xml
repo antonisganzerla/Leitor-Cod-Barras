@@ -15,4 +15,7 @@
     <string name="msg_without_access_to_camera">Sem acesso a câmera não é possível realizar escaneamentos</string>
 
     <string name="device_test_id">03558ABDB5300C4F9DC904FEE5B859B8</string>
+    <string name="tv_scanner_cam">Câmera de escaneamento</string>
+    <string name="rb_cam_back">Traseira</string>
+    <string name="rb_cam_front">Frontal</string>
 </resources>
