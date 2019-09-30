@@ -1,18 +1,20 @@
 package com.sgztech.codescanner.view
 
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
 import com.sgztech.codescanner.R
+import com.sgztech.codescanner.util.AdsUtil.ID_INTERSTICIAL_AD
+import com.sgztech.codescanner.util.AdsUtil.buildIntersticialAd
+import com.sgztech.codescanner.util.AdsUtil.init
+import com.sgztech.codescanner.util.AdsUtil.setupBannerAd
+import com.sgztech.codescanner.util.AdsUtil.showIntersticialAd
+import com.sgztech.codescanner.util.AlertDialogUtil
 import com.sgztech.codescanner.util.PermissionUtil.checkResultPermission
 import com.sgztech.codescanner.util.PermissionUtil.havePermissions
 import com.sgztech.codescanner.util.SnackBarUtil.show
@@ -34,6 +36,56 @@ class MainActivity : AppCompatActivity() {
         setupAds()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.nav_item_rate -> {
+                rateApp()
+                return true
+            }
+            R.id.nav_item_share -> {
+                shareApp()
+                return true
+            }
+            R.id.nav_item_about -> {
+                AlertDialogUtil.showSimpleDialog(
+                    this,
+                    R.string.dialog_about_app_title,
+                    R.string.dialog_about_app_message
+                )
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun rateApp() {
+        val uri = Uri.parse(getString(R.string.app_store_url))
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        try {
+            startActivity(intent)
+        } catch (exception: ActivityNotFoundException) {
+            show(btnCopy, R.string.msg_store_app_not_found)
+        }
+    }
+
+    private fun shareApp() {
+        val intent = Intent(Intent.ACTION_SEND)
+        val msg = getString(R.string.app_store_details).plus(getString(R.string.app_store_url))
+        intent.putExtra(Intent.EXTRA_TEXT, msg)
+        intent.type = "text/plain"
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
+    }
+
     private fun setupDefaultRbCam() {
         rb_cam_back.isChecked = true
     }
@@ -45,7 +97,7 @@ class MainActivity : AppCompatActivity() {
             if (result.isNotEmpty()) {
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip =
-                    ClipData.newPlainText("bar_code", result)
+                    ClipData.newPlainText(LABEL_CLIP_DATA, result)
                 clipboard.primaryClip = clip
                 show(it, R.string.msg_copied)
             } else {
@@ -63,29 +115,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAds() {
-        MobileAds.initialize(this)
-        setupBannerAd()
-        setupInterstitialAd()
-    }
-
-    private fun setupBannerAd() {
-        adView.loadAd(AdRequest.Builder().build())
-    }
-
-    private fun setupInterstitialAd() {
-        mInterstitialAd = InterstitialAd(this)
-        mInterstitialAd.adUnitId = "ca-app-pub-9764822217711668/6092884455"
-        loadInterstitialAd()
-        mInterstitialAd.adListener = object : AdListener() {
-            override fun onAdClosed() {
-                Log.d("Ads", "loaded new ads")
-                loadInterstitialAd()
-            }
-        }
-    }
-
-    private fun loadInterstitialAd() {
-        mInterstitialAd.loadAd(AdRequest.Builder().build())
+        init(applicationContext)
+        setupBannerAd(adView)
+        mInterstitialAd = buildIntersticialAd(applicationContext, ID_INTERSTICIAL_AD)
     }
 
     private fun openScannerActivity() {
@@ -98,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        showInterstitialAd()
+        showIntersticialAd(mInterstitialAd)
         data?.let {
             if (requestCode == RESULT_CODE) {
 
@@ -113,14 +145,6 @@ class MainActivity : AppCompatActivity() {
                     etResult.text = ""
                 }
             }
-        }
-    }
-
-    private fun showInterstitialAd() {
-        if (mInterstitialAd.isLoaded) {
-            mInterstitialAd.show()
-        } else {
-            Log.d("Ads", "The interstitial wasn't loaded yet.")
         }
     }
 
@@ -157,6 +181,7 @@ class MainActivity : AppCompatActivity() {
         const val SELECTED_CAM = "SELECTED_CAM"
         const val SCANNED_DATA = "SCANNED_DATA"
         const val SCANNED_ERROR = "SCANNED_ERROR"
+        const val LABEL_CLIP_DATA = "bar_code"
     }
 
 }
