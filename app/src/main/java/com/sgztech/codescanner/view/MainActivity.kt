@@ -7,13 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.InterstitialAd
 import com.sgztech.codescanner.R
-import com.sgztech.codescanner.util.AdsUtil.ID_INTERSTICIAL_AD
-import com.sgztech.codescanner.util.AdsUtil.buildIntersticialAd
-import com.sgztech.codescanner.util.AdsUtil.init
-import com.sgztech.codescanner.util.AdsUtil.setupBannerAd
-import com.sgztech.codescanner.util.AdsUtil.showIntersticialAd
 import com.sgztech.codescanner.util.AlertDialogUtil
 import com.sgztech.codescanner.util.PermissionUtil.checkResultPermission
 import com.sgztech.codescanner.util.PermissionUtil.havePermissions
@@ -24,8 +18,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mInterstitialAd: InterstitialAd
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         setupDefaultRbCam()
         setupBtnScan()
         setupBtnCopy()
-        setupAds()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -114,12 +105,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAds() {
-        init(applicationContext)
-        setupBannerAd(adView)
-        mInterstitialAd = buildIntersticialAd(applicationContext, ID_INTERSTICIAL_AD)
-    }
-
     private fun openScannerActivity() {
         startActivityForResult(
             setupIntent(applicationContext, selectedCam()),
@@ -130,7 +115,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        showIntersticialAd(mInterstitialAd)
         data?.let {
             if (requestCode == RESULT_CODE) {
 
